@@ -66,20 +66,21 @@ FROM employees;
 # STEP 8
 # Total price of all orders
 sum_total_price = pd.read_sql("""
-SELECT ROUND(priceEach * quantityOrdered) AS total_price
+SELECT SUM(ROUND(priceEach * quantityOrdered)) AS total_price
 FROM orderDetails;
-""", conn).sum()
+""", conn).iloc[:,0]
+
 
 
 # STEP 9
 # Day, Month, Year from orderDate
 df_day_month_year = pd.read_sql("""
 SELECT
-orderDate,
-strftime('%d', orderDate) AS day,
-strftime('%m', orderDate) AS month,
-strftime('%Y', orderDate) AS year
-FROM orderDetails;
+    orderDate,
+    strftime('%d', orderDate) AS day,
+    strftime('%m', orderDate) AS month,
+    strftime('%Y', orderDate) AS year
+FROM orders;
 """, conn)
 
 
